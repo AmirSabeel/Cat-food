@@ -1,22 +1,82 @@
-# RAS storefront preview
+# RAS ecommerce development
 
-Initial storefront for RAS International Trading WLL, intended for rasqatar.com.
+A working local storefront and administration app for RAS International Trading WLL. Hosting and changes to rasqatar.com are intentionally deferred.
 
-## Preview locally
+![Desktop storefront](docs/storefront-desktop.png)
 
-Open index.html in a browser, or serve this directory with `python3 -m http.server 8000` and visit http://localhost:8000.
+## Run on your laptop
 
-## Included
+Python 3.10 or newer is required. There are no Python package dependencies.
 
-- 84 unique barcode entries from four client-supplied PDF lists; identical duplicate excluded.
-- Supplier-PDF product images, descriptions, reference numbers, prices and carton quantities.
-- Product search, category/list filters and responsive layout.
-- Device-local draft cart with quantity controls. No orders, payments or personal information are submitted.
+```bash
+git clone https://github.com/AmirSabeel/Cat-food.git
+cd Cat-food
+python server.py
+```
 
-## Before launch
+Open **http://127.0.0.1:8000**. On systems where Python is named `python3`, use that instead. Run the server rather than opening index.html directly: products, settings and checkout use the local API.
 
-Confirm product scope (pet supplies and/or groceries), retail versus wholesale selling units, customer prices and currency for Cozina. Confirm stock, original product images, delivery areas/fees, business contact details and customer policies. Implement and test a secure order backend, stock validation, admin authentication, payment gateway/webhooks and notifications. Configure hosting and the domain only after deployment review. PDF descriptions and prices have not been independently approved for retail use.
+To create an administrator, open a second terminal in the project folder:
 
-## Validation
+```bash
+python manage.py
+```
 
-84 unique barcodes checked; JavaScript syntax check passed. Browser interaction and visual tests remain pending: the current execution environment has no installed Playwright Chromium binary. This is an initial frontend preview, not a production-ready ecommerce system.
+Choose a username and a password of at least 12 characters. No default password exists. Sign in at **http://127.0.0.1:8000/admin**. Running manage.py again for the same username resets that account's password and revokes its sessions.
+
+## What works
+
+- Responsive storefront, categories, brand filters, search, sorting and product details.
+- 84 unique barcode entries imported from four unique supplier PDFs. The duplicate PLAISIR file was excluded.
+- Original product images extracted from the supplier PDFs. Image resolution is limited by the source files.
+- Browser-local bag with quantity changes, removal and persistence.
+- Customer enquiries saved in SQLite with reference numbers and visible to administrators.
+- Admin sign-in, product name/visibility editing, selling unit, price confirmation and stock management.
+- Delivery areas, delivery fees, minimum order and cash-on-delivery enablement.
+- Cash-on-delivery checkout for confirmed, available products when ordering is enabled.
+- Server-calculated totals, price-change checks, transactional stock reservation and idempotent submissions.
+- Order fulfilment stages, cancellation with stock restoration, and explicit recording of cash collected after delivery.
+
+## Defaults and client decisions
+
+Online ordering is **disabled** initially. No retail selling prices, pack units, stock quantities or delivery areas are invented. Public products show **Price on request** until approved. Supplier prices, box prices, carton quantities and source references are available privately in the admin product editor.
+
+To enable cash-on-delivery orders:
+
+1. In Products, enter each product's approved selling price in QAR, selling unit and available quantity. Tick **Price and selling unit confirmed**.
+2. In Store settings, set supported delivery areas, the delivery fee and any minimum order. Enable cash-on-delivery orders when the client is ready.
+3. Unconfirmed or unavailable products still accept an enquiry. A mixed bag containing an unconfirmed product uses the enquiry flow, without reserving stock or collecting payment.
+
+The Cozina PDF does not explicitly label its currency. Multipacks and carton/unit pricing need client confirmation. Categories are an initial merchandising classification and should be reviewed, especially treats. Do not treat supplier descriptions as verified feeding or health advice.
+
+## Data and security
+
+The app initializes `data/ras.sqlite3` on first run. This contains products, settings, accounts, sessions, enquiries and orders. It is excluded from git, as are local environment files. Stop the development server before making a simple file-copy backup of the database. Never upload customer databases to this public repository.
+
+`products.json` is a seed catalogue, not the live database: restarting does not overwrite admin edits. No private customer data or test credentials are included in source control.
+
+Administrator passwords use salted PBKDF2 hashes. Sessions use opaque tokens, HttpOnly/SameSite cookies, expiry and CSRF checks. Mutations require a same-origin JSON request. Login and enquiry requests have basic rate limits. Order totals, availability and stock are verified server-side. Public APIs do not expose enquiries or supplier pricing; internal files cannot be served through the web server.
+
+Environment options:
+
+- `RAS_DB`: alternate SQLite path, useful for isolated tests.
+- `RAS_SECURE_COOKIES=1`: use Secure session cookies when running behind HTTPS.
+- `python server.py --port 8000`: choose a local port. The default bind address is 127.0.0.1.
+
+## Tests
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+The 12 HTTP integration tests cover access controls, CSRF/origin validation, price/stock validation, duplicate submissions, rollback, competing orders, fulfilment, cash collection and cancellation. They create their own temporary database and never use the store database.
+
+Browser checks also passed at desktop (1440 × 1000) and mobile (390 × 844) sizes: filtering, search, product detail, bag persistence, enquiry submission, admin login, product editing, delivery setup, cash-on-delivery checkout, fulfilment and cash collection. No browser JavaScript errors were observed. The check identified and fixed stale delivery settings: the bag and checkout now refresh current product/settings data.
+
+## Remaining before public launch
+
+This is a tested **development application**, not a deployed or fully hardened production service. Python's built-in HTTP server is for local development. Production deployment requires an appropriate server/application integration, HTTPS, backups, monitoring and a deployment/security review. No hosting or domain changes have been made.
+
+Not yet integrated: card payment gateway and signed payment webhooks, automatic email/SMS/WhatsApp notifications, refunds, customer accounts, password recovery and automated tax handling. Submitted requests are stored for staff to review; the app does not send notifications. Card payments require the client's chosen provider and merchant credentials, kept out of source control.
+
+The client also needs to approve the final product scope, retail/wholesale units, prices/currency, stock, delivery terms, contact details, branding, high-resolution photos, privacy/returns policies and any applicable tax settings before accepting live customers.
