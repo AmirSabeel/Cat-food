@@ -119,7 +119,7 @@ class Handler(BaseHTTPRequestHandler):
                 if candidate.is_relative_to(ROOT/'static') and candidate.is_file():target=str(candidate.relative_to(ROOT))
             if not target:return self.reply(404,{'error':'Not found.'})
             file=ROOT/target
-            raw=file.read_bytes();mime={'.html':'text/html','.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml'}.get(file.suffix,'application/octet-stream')
+            raw=file.read_bytes();mime={'.html':'text/html','.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml','.png':'image/png','.jpeg':'image/jpeg','.jpg':'image/jpeg','.webp':'image/webp'}.get(file.suffix,'application/octet-stream')
             self.send_response(200);self.send_header('Content-Type',mime+'; charset=utf-8');self.send_header('Content-Length',str(len(raw)));self.send_header('Cache-Control','no-cache');self.security_headers();self.end_headers();self.wfile.write(raw)
         except PermissionError as e:self.reply(401,{'error':str(e)})
         except Exception:self.reply(500,{'error':'Unable to load this page. Please try again.'})

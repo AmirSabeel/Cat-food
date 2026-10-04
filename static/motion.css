@@ -1,0 +1,46 @@
+/* Scroll-led pet storytelling. The page remains fully usable without motion. */
+.hero-visual.pet-hero{min-height:0;display:block;align-self:center;padding:25px 0 40px}
+.pet-portrait-frame{position:relative;aspect-ratio:1.34;overflow:hidden;border-radius:180px 180px 24px 24px;background:#08657d;transform:translateY(var(--hero-drift,0px)) rotate(-2deg);box-shadow:0 25px 55px #173e361a}
+.pet-portrait-frame>img{position:absolute;top:0;left:0;width:100%;height:auto;transform:translateY(-13%);display:block}
+.pet-hero-caption{position:absolute;bottom:14px;right:0;background:#e6ecc8;padding:18px 22px;border-radius:12px;font:italic 22px Georgia,serif;transform:rotate(3deg)}
+.scroll-cue{display:flex;align-items:center;gap:10px;margin-top:23px;font-size:12px;color:#657260;letter-spacing:.6px}
+.scroll-cue span{width:19px;height:29px;border:1px solid #8d9b86;border-radius:12px;position:relative}
+.scroll-cue span:after{content:'';position:absolute;width:3px;height:6px;left:7px;top:6px;background:var(--green);border-radius:3px;animation:scroll-dot 2s ease-in-out infinite}
+@keyframes scroll-dot{0%,100%{transform:translateY(0);opacity:.5}55%{transform:translateY(9px);opacity:1}}
+.gaze-scroll{position:relative;height:190svh;min-height:1000px;background:#073f47;--gaze:0;--pack-y:120px;--pack-rotate:-18deg;--pack-scale:.8;--cat-rise:30px}
+.gaze-stage{position:sticky;top:0;height:100svh;min-height:640px;max-height:1000px;overflow:hidden;color:#fff6e6;background:radial-gradient(ellipse at 70% 55%,#1b7475 0,#0e5960 35%,#073f47 76%)}
+.gaze-copy{position:absolute;left:7%;top:9%;max-width:550px;z-index:4}
+.gaze-copy .eyebrow{color:#ceddb4;font-size:12px}
+.gaze-copy h2{font-size:clamp(36px,4.2vw,66px);letter-spacing:-2px;margin:18px 0;max-width:530px;line-height:1.08}
+.gaze-copy h2 em{color:#dddfa9}
+.gaze-copy p{font-size:15px;color:#c0d6d0;max-width:330px;line-height:1.7}
+.cat-gaze{position:absolute;bottom:-2%;left:5%;width:min(41vw,560px);aspect-ratio:1;z-index:3;transform:translateY(var(--cat-rise));isolation:isolate}
+.cat-pose{position:absolute;inset:0;background-image:url('/static/images/cat-gaze-sprite.png');background-repeat:no-repeat;background-size:200% 100%;will-change:opacity;pointer-events:none}
+.cat-forward{background-position:left center;opacity:calc(1 - var(--gaze))}
+.cat-up{background-position:right center;opacity:var(--gaze)}
+.product-orbit{position:absolute;right:8%;top:27%;width:35%;height:53%;display:grid;place-items:center;perspective:900px}
+.orbit-halo{position:absolute;width:100%;aspect-ratio:1;border:1px solid #dce4b52b;border-radius:50%;transform:scale(1.04)}
+.orbit-halo:after{content:'';position:absolute;inset:10%;border:1px solid #dce4b525;border-radius:50%}
+.spotlight-pack{width:65%;height:88%;object-fit:contain;z-index:2;transform:translateY(var(--pack-y)) rotate(var(--pack-rotate)) scale(var(--pack-scale));filter:drop-shadow(20px 28px 15px #001f2980);will-change:transform}
+.pack-badge{position:absolute;z-index:3;right:-4%;top:2%;height:90px;width:90px;border-radius:50%;background:#e9dda7;color:#173e36;display:grid;place-content:center;text-align:center;font-size:12px;line-height:1.5;transform:rotate(10deg)}
+.pack-badge strong{font-size:18px;font-family:Georgia,serif;font-weight:400}
+.spotlight-info{position:absolute;z-index:4;bottom:9%;right:9%;width:31%;text-align:center}
+.spotlight-info h3{font-size:21px;line-height:1.3;margin-bottom:8px}
+.spotlight-info p{font-size:13px;color:#c0d6d0;margin-bottom:16px}
+.spotlight-info .button{background:#e4e9b9;color:#123d3f;font-size:13px;padding:13px 22px}
+.motion-controls{position:absolute;right:20px;top:20px;z-index:6;display:flex;gap:8px}
+.motion-controls button{border:1px solid #c9e1d44d;color:#dfebdf;background:#073f4780;padding:8px 12px;border-radius:30px;font-size:12px}
+.gaze-progress{position:absolute;bottom:20px;left:50%;width:100px;height:3px;background:#ffffff26;border-radius:2px;z-index:5}
+.gaze-progress span{display:block;height:100%;background:#e6dfab;width:calc(var(--progress,0) * 100%)}
+.pets-peek{padding:45px 6% 0;background:#f7f7f7;text-align:center;overflow:hidden}
+.pets-peek h2{font-size:clamp(28px,3vw,42px);margin:13px 0}
+.pets-peek .eyebrow{font-size:12px}
+.peek-window{max-width:1080px;aspect-ratio:4.5;margin:25px auto 0;overflow:hidden;position:relative}
+.peek-window img{display:block;width:100%;height:auto;transform:translateY(calc(-49.5% + var(--peek-shift,30px)));will-change:transform}
+.pets-peek+.section{margin-top:0}
+.motion-off .spotlight-pack{transform:translateY(0) rotate(5deg) scale(1)}
+.motion-off .cat-gaze{transform:none}.motion-off .cat-forward{opacity:0}.motion-off .cat-up{opacity:1}
+.motion-off .pet-portrait-frame{transform:rotate(-2deg)}.motion-off .scroll-cue span:after{animation:none}
+@media(max-width:900px){.gaze-copy{left:6%;top:10%;max-width:45%}.gaze-copy h2{font-size:42px}.gaze-copy p{font-size:14px}.cat-gaze{width:49vw;left:0}.product-orbit{right:5%;width:39%;top:31%}.spotlight-info{right:6%;width:38%;bottom:7%}}
+@media(max-width:650px){.hero-visual.pet-hero{padding:15px 0 25px;margin-top:15px}.pet-portrait-frame{border-radius:100px 100px 18px 18px}.pet-hero-caption{font-size:18px;padding:12px 16px;bottom:7px}.gaze-scroll{height:175svh;min-height:1100px}.gaze-stage{min-height:620px;max-height:850px}.gaze-copy{top:8%;left:6%;max-width:85%}.gaze-copy .eyebrow{font-size:10px;letter-spacing:1.6px}.gaze-copy h2{font-size:39px;max-width:350px;letter-spacing:-1.3px;margin:14px 0}.gaze-copy p{font-size:13px;max-width:260px}.cat-gaze{width:67vw;left:-10%;bottom:-1%}.product-orbit{right:2%;top:32%;width:51%;height:39%}.spotlight-pack{width:68%;height:88%}.pack-badge{height:65px;width:65px;font-size:9px;right:0;top:-7%}.pack-badge strong{font-size:14px}.spotlight-info{bottom:7%;right:4%;width:43%;text-align:right}.spotlight-info h3{font-size:17px}.spotlight-info p{font-size:11px;line-height:1.5}.spotlight-info .button{padding:11px 14px;font-size:12px}.motion-controls{right:12px;top:12px}.motion-controls button{font-size:10px;padding:6px 10px}.gaze-progress{left:60%;bottom:16px;width:80px}.pets-peek{padding:30px 5% 0}.pets-peek .eyebrow{font-size:10px}.peek-window{width:115%;max-width:none;margin-left:-7.5%;margin-top:22px}.scroll-cue{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.gaze-scroll{height:auto;min-height:0}.gaze-stage{position:relative;height:760px;max-height:none}.spotlight-pack{transform:rotate(5deg)}.cat-gaze{transform:none}.cat-forward{opacity:0}.cat-up{opacity:1}.pet-portrait-frame{transform:rotate(-2deg)}.scroll-cue span:after{animation:none}.peek-window img{transform:translateY(-49.5%)}.gaze-progress{display:none}}
