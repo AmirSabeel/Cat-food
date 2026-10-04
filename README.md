@@ -65,11 +65,15 @@ Environment options:
 
 ## Tests
 
+Product details have direct `#product/<barcode>` links with copy-link actions. Browser Back/Forward restores catalogue filters and scroll position. Mobile bag controls use larger touch targets; unchanged carts retain checkout retry keys to help prevent duplicate requests after connection failures.
+
 ```bash
 python -m unittest discover -s tests -v
 ```
 
 The 12 HTTP integration tests cover access controls, CSRF/origin validation, price/stock validation, duplicate submissions, rollback, competing orders, fulfilment, cash collection and cancellation. They create their own temporary database and never use the store database.
+
+With Playwright and Chromium installed, run `node tests/navigation.cjs` against a local server. Optional `RAS_TEST_URL` and `RAS_BROWSER_PATH` select the local URL and browser executable. This check covers product links, reload, history navigation, restored filters, copy links, cart retry keys, quantity limits and mobile touch targets.
 
 Browser checks also passed at desktop (1440 × 1000) and mobile (390 × 844) sizes: filtering, search, product detail, bag persistence, enquiry submission, admin login, product editing, delivery setup, cash-on-delivery checkout, fulfilment and cash collection. No browser JavaScript errors were observed. The check identified and fixed stale delivery settings: the bag and checkout now refresh current product/settings data.
 

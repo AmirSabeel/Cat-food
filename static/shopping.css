@@ -1,0 +1,29 @@
+/* Larger touch targets and a clearer product-detail handoff. */
+.dialog-open{overflow:hidden}
+.product-link-actions{margin-top:18px;padding-top:18px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.product-link-actions .button{margin-top:0;min-height:44px}
+.product-link-actions .muted{margin:0;font-size:12px;line-height:1.6}
+.text-button{background:none;border:0;color:var(--ink);padding:10px;min-height:44px;text-decoration:underline;text-underline-offset:4px;font-size:13px}
+.copy-link-field{width:100%;font-size:13px}
+.site-header nav a[aria-current=page]{text-decoration:underline;text-underline-offset:7px}
+.icon-button{min-width:44px;min-height:44px}
+.quantity button{width:44px;height:44px}
+.quantity span{min-width:36px}
+.remove-button{min-height:44px;padding:8px 6px}
+.bag-availability+.notice{margin-top:8px;background:#f3f5ec}
+.product-dialog{scrollbar-gutter:stable}
+@media(max-width:650px){
+  .product-image-button{min-height:165px}
+  .add-button{width:44px;height:44px;font-size:25px}
+  .product-info{padding:12px}
+  .product-title{font-size:13px}
+  .product-price{font-size:12px}
+  .product-info .muted{font-size:10px}
+  .cart-button{min-height:44px}
+  .detail-copy .muted{font-size:12px;line-height:1.7}
+  .product-dialog{max-height:92dvh;padding:23px}
+  .motion-controls button{font-size:12px;min-height:38px}
+  .bag-row h3{font-size:13px}
+  .bag-row img{width:52px}
+  .bag-row{gap:12px}
+}
